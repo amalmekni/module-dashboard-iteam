@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .container {
+            margin-top: 50px;
+        }
+        .card {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center mb-4">Student Dashboard</h1>
+        <div class="text-end mt-3">
+            <a href="/" class="btn btn-danger">Logout</a>
+        </div>
+        
+        <div class="row">
+            <!-- Courses Section -->
+            <div class="col-md-4">
+                <h3>Courses</h3>
+                <div id="courses">
+                    <p>Loading courses...</p>
+                </div>
+            </div>
+            <!-- Quizzes Section -->
+            <div class="col-md-4">
+                <h3>Quizzes</h3>
+                <div id="quizzes">
+                    <p>Loading quizzes...</p>
+                </div>
+            </div>
+            <!-- Videos Section -->
+            <div class="col-md-4">
+                <h3>Videos</h3>
+                <div id="videos">
+                    <p>Loading videos...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        // Fetch and display courses
+        fetch('/api/courses')
+            .then(response => response.json())
+            .then(data => {
+                const coursesDiv = document.getElementById('courses');
+                coursesDiv.innerHTML = '';
+                if (data.length === 0) {
+                    coursesDiv.innerHTML = '<p>No courses available.</p>';
+                } else {
+                    data.forEach(course => {
+                        const courseCard = `
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">${course.title}</h5>
+                                    <p class="card-text">${course.description}</p>
+                                    <a href="${course.file_path}" class="btn btn-primary" target="_blank">Download Course</a>
+                                </div>
+                            </div>`;
+                        coursesDiv.innerHTML += courseCard;
+                    });
+                }
+            });
+
+        // Fetch and display quizzes
+        fetch('/api/quizzes')
+            .then(response => response.json())
+            .then(data => {
+                const quizzesDiv = document.getElementById('quizzes');
+                quizzesDiv.innerHTML = '';
+                if (data.length === 0) {
+                    quizzesDiv.innerHTML = '<p>No quizzes available.</p>';
+                } else {
+                    data.forEach(quiz => {
+                        const quizCard = `
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">${quiz.title}</h5>
+                                    <p class="card-text">${quiz.description}</p>
+                                    <a href="${quiz.file_path}" class="btn btn-primary" target="_blank">Download Quiz</a>
+                                </div>
+                            </div>`;
+                        quizzesDiv.innerHTML += quizCard;
+                    });
+                }
+            });
+
+        // Fetch and display videos
+        fetch('/api/videos')
+            .then(response => response.json())
+            .then(data => {
+                const videosDiv = document.getElementById('videos');
+                videosDiv.innerHTML = '';
+                if (data.length === 0) {
+                    videosDiv.innerHTML = '<p>No videos available.</p>';
+                } else {
+                    data.forEach(video => {
+                        const videoCard = `
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">${video.title}</h5>
+                                    <p class="card-text">${video.description}</p>
+                                    <a href="${video.file_path}" class="btn btn-primary" target="_blank">Watch Video</a>
+                                </div>
+                            </div>`;
+                        videosDiv.innerHTML += videoCard;
+                    });
+                }
+            });
+    </script>
+</body>
+</html>
